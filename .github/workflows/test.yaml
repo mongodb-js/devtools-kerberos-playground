@@ -48,6 +48,9 @@ jobs:
       - name: Install enterprise shell
         run: .\scripts\download-shell.ps1
         shell: powershell
+      - run: Get-ChildItem
+        shell: powershell
+
       # - name: Install Dependencies
       #   run: npm install
       # - name: Test
