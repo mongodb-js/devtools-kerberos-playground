@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEBIAN_FRONTEND: noninteractive
+      MONGODB_SHELL_BINARY: mongodb-linux-x86_64-enterprise-ubuntu2004-4.4.6/bin/mongo
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
@@ -18,6 +19,7 @@ jobs:
           node-version: 14.x
       - run: sudo apt-get update -y
       - run: sudo apt-get install krb5-user -y
+      - run: curl -sSfL 'https://downloads.mongodb.com/linux/mongodb-shell-linux-x86_64-enterprise-ubuntu2004-4.4.6.tgz' | tar -xvz
 
       - name: Install Dependencies
         run: npm install
@@ -26,11 +28,13 @@ jobs:
       - run: sudo npm run setup-krb5-conf
       - run: sudo npm run start-server-detatched
 
+      - run: sleep 10 # wait for docker containers to be ready
+
       - name: Mongo version
         run: mongo --version
 
       - name: Test
-        run: sudo npm test
+        run:  npm test
 
   # test-windows:
   #   name: Windows tests
