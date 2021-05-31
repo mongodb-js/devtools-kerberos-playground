@@ -52,6 +52,8 @@ jobs:
         shell: powershell
       - run: Get-ChildItem -Path .\shell
         shell: powershell
+      - run: .\shell\mongodb-win32-x86_64-enterprise-windows-4.4.6\bin\mongo.exe --version
+        shell: powershell
 
       # - name: Install Dependencies
       #   run: npm install
