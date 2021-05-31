@@ -50,6 +50,8 @@ jobs:
         shell: powershell
       - run: Get-ChildItem
         shell: powershell
+      - run: Get-ChildItem -Path .\shell
+        shell: powershell
 
       # - name: Install Dependencies
       #   run: npm install
