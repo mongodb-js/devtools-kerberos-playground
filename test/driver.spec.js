@@ -35,16 +35,16 @@ describe('driver', () => {
     });
 
     describe('?gssapiServiceName', () => {
-      it('connects with alternate service name', async() => {
-        const user = await driver.connectAndReturnUser(
+      it('is not supported anymore', async() => {
+        const error = await driver.connectAndReturnUser(
           buildGssapiConnectionString(
             USER_PRINCIPAL,
             SERVER_WITH_ALTERNATE_NAME,
             { gssapiServiceName: 'alternate' }
           )
-        );
+        ).catch(err => err);
 
-        assert.deepStrictEqual(user, EXPECTED_USER);
+        assert.strictEqual(error.message, 'option gssapiservicename is not supported');
       });
     });
 
@@ -60,6 +60,20 @@ describe('driver', () => {
           );
 
           assert.deepStrictEqual(user, EXPECTED_USER);
+        });
+      });
+
+      describe('gssapiServiceName', () => {
+        it('is not supported in authMechanismProperties', async() => {
+          const errorOrUser = await driver.connectAndReturnUser(
+            buildGssapiConnectionString(
+              USER_PRINCIPAL,
+              SERVER_WITH_ALTERNATE_NAME,
+              { authMechanismProperties: 'gssapiServiceName:alternate' }
+            )
+          ).catch(err => err);
+
+          assert.ok(errorOrUser instanceof Error);
         });
       });
 
