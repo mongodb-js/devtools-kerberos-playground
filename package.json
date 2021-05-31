@@ -10,7 +10,8 @@
     "setup-host-entries": "node scripts/setup-host-entries.js",
     "setup-krb5-conf": "node scripts/setup-krb5-conf.js",
     "remove-host-entries": "node scripts/remove-host-entries.js",
-    "start-server": "docker-compose up --build --force-recreate"
+    "start-server": "docker-compose up --build --force-recreate",
+    "start-server-detatched": "docker-compose up -d --build --force-recreate"
   },
   "engines": {
     "node": ">=12"

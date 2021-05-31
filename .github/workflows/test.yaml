@@ -1,0 +1,35 @@
+on: [push]
+
+name: CI
+
+jobs:
+  test-linux:
+    name: Linux tests
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      MONGODB_SHELL_BINARY: mongodb-linux-x86_64-enterprise-ubuntu2004-4.4.6/bin/mongo
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          check-latest: true
+          node-version: 14.x
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install krb5-user libsasl2-modules-gssapi-mit ldap-utils -y
+      - run: curl -sSfL 'https://downloads.mongodb.com/linux/mongodb-shell-linux-x86_64-enterprise-ubuntu2004-4.4.6.tgz' | tar -xvz
+
+      - name: Install Dependencies
+        run: npm install
+
+      - run: sudo npm run setup-host-entries
+      - run: sudo npm run setup-krb5-conf
+      - run: sudo npm run start-server-detatched
+
+      - name: Wait for docker containers
+        run: sleep 10
+
+      - name: Test
+        run: npm test
