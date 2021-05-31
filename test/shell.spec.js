@@ -64,6 +64,38 @@ describe('shell', () => {
       });
     });
 
+    describe('--sspiRealmOverride', () => {
+      before(function() {
+        if (process.platform !== 'win32') {
+          this.skip();
+        }
+      });
+
+      it('specifies a realm if missing', async() => {
+        const user = await shell.connectAndReturnUser(
+          buildGssapiConnectionString(
+            USER_NAME,
+            SERVER_WITH_DEFAULT_NAME
+          ),
+          `--sspiRealmOverride=${REALM}`
+        );
+
+        assert.deepStrictEqual(user, EXPECTED_USER);
+      });
+
+      // NOTE: this would require a cross-realm setup to be tested properly
+      it('overrides only the service realm if the user principal already has a realm', async() => {
+        const user = await shell.connectAndReturnUser(
+          buildGssapiConnectionString(
+            USER_PRINCIPAL,
+            SERVER_WITH_DEFAULT_NAME
+          ),
+          `--sspiRealmOverride=${REALM}`
+        );
+
+        assert.deepStrictEqual(user, EXPECTED_USER);
+      });
+    });
 
     describe('?authMechanismProperties', () => {
       describe('SERVICE_NAME', () => {
@@ -80,6 +112,10 @@ describe('shell', () => {
         });
       });
 
+      describe.skip('CANONICALIZE_HOST_NAME', () => {
+        // TODO
+      });
+
       describe('SERVICE_REALM', () => {
         it('specifies a realm if missing', async() => {
           const user = await shell.connectAndReturnUser(
@@ -94,7 +130,7 @@ describe('shell', () => {
         });
 
         // NOTE: this would require a cross-realm setup to be tested properly
-        it('overrides only the service realm if a user already has a realm', async() => {
+        it('overrides only the service realm if the user principal already has a realm', async() => {
           const user = await shell.connectAndReturnUser(
             buildGssapiConnectionString(
               USER_PRINCIPAL,
@@ -118,6 +154,16 @@ describe('shell', () => {
 
         assert.deepStrictEqual(user, EXPECTED_USER);
       });
+    });
+
+    describe.skip('--sspiHostnamecanonicalization', () => {
+      before(function() {
+        if (process.platform !== 'win32') {
+          this.skip();
+        }
+      });
+
+      // TODO
     });
   });
 });
