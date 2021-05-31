@@ -24,7 +24,7 @@ jobs:
 
       - run: sudo npm run setup-host-entries
       - run: sudo npm run setup-krb5-conf
-      - run: sudo npm run start-server -d
+      - run: sudo npm run start-server-detatched
 
       - name: Test
         run: sudo npm test
