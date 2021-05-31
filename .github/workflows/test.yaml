@@ -1,0 +1,46 @@
+on: [push]
+
+name: CI
+
+jobs:
+  test-linux:
+    name: Linux tests
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          check-latest: true
+          node-version: 14.x
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install krb5-user -y
+
+      - name: Install Dependencies
+        run: npm install
+
+      - run: sudo npm run setup-host-entries
+      - run: sudo npm run setup-krb5-conf
+      - run: sudo npm run start-server -d
+
+      - name: Test
+        run: sudo npm test
+
+  # test-windows:
+  #   name: Windows tests
+  #   strategy:
+  #     fail-fast: false
+  #   runs-on: windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2-beta
+  #       with:
+  #         check-latest: true
+  #         node-version: 14.x
+  #     - name: Install Dependencies
+  #       run: npm install
+  #     - name: Test
+  #       run: npm test
