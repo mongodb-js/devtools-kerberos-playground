@@ -26,6 +26,9 @@ jobs:
       - run: sudo npm run setup-krb5-conf
       - run: sudo npm run start-server-detatched
 
+      - name: Mongo version
+        run: mongo --version
+
       - name: Test
         run: sudo npm test
 
