@@ -28,23 +28,8 @@ jobs:
       - run: sudo npm run setup-krb5-conf
       - run: sudo npm run start-server-detatched
 
-      - run: sleep 10 # wait for docker containers to be ready
+      - name: Wait for docker containers
+        run: sleep 10
 
       - name: Test
         run: npm test
-
-  # test-windows:
-  #   name: Windows tests
-  #   strategy:
-  #     fail-fast: false
-  #   runs-on: windows-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v2-beta
-  #       with:
-  #         check-latest: true
-  #         node-version: 14.x
-  #     - name: Install Dependencies
-  #       run: npm install
-  #     - name: Test
-  #       run: npm test
